@@ -1,0 +1,102 @@
+[gd_scene load_steps=11 format=3 uid="uid://cq5gijvp66d0w"]
+
+[ext_resource type="Texture2D" uid="uid://6ewdwmnnv3x2" path="res://flappy-bird-assets/sprites/background-day.png" id="1_51qp6"]
+[ext_resource type="Script" path="res://scripts/flap.gd" id="1_dr45h"]
+[ext_resource type="Script" path="res://main.gd" id="1_xdd85"]
+[ext_resource type="Texture2D" uid="uid://komb04dvbdwm" path="res://flappy-bird-assets/sprites/yellowbird-midflap.png" id="2_l31fc"]
+[ext_resource type="PackedScene" uid="uid://bkkaf4egj8ynv" path="res://nodes/pipes.tscn" id="4_u5jgx"]
+[ext_resource type="Texture2D" uid="uid://br03uyhpgve54" path="res://flappy-bird-assets/sprites/base.png" id="4_wyr5b"]
+[ext_resource type="Script" path="res://spawn.gd" id="5_dyiee"]
+[ext_resource type="Script" path="res://parallax_2d.gd" id="7_s4r0k"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_eh2u7"]
+height = 20.0
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_yijrw"]
+size = Vector2(365, 110)
+
+[node name="game scene" type="Node2D"]
+script = ExtResource("1_xdd85")
+
+[node name="Camera2D" type="Camera2D" parent="."]
+position = Vector2(-8, 0)
+zoom = Vector2(1.5, 1.5)
+
+[node name="CharacterBody2D" type="CharacterBody2D" parent="." groups=["bird"]]
+z_index = 3
+position = Vector2(-8, 0)
+script = ExtResource("1_dr45h")
+
+[node name="Sprite2D" type="Sprite2D" parent="CharacterBody2D"]
+texture_filter = 1
+texture = ExtResource("2_l31fc")
+
+[node name="Area2D" type="Area2D" parent="CharacterBody2D" groups=["bird"]]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CharacterBody2D/Area2D"]
+position = Vector2(-1, 0)
+shape = SubResource("CapsuleShape2D_eh2u7")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CharacterBody2D"]
+shape = SubResource("CapsuleShape2D_eh2u7")
+
+[node name="Node2D" type="Node2D" parent="."]
+script = ExtResource("5_dyiee")
+
+[node name="Timer" type="Timer" parent="Node2D"]
+autostart = true
+
+[node name="Base" type="Sprite2D" parent="."]
+visible = false
+position = Vector2(-1.5, 330)
+scale = Vector2(1.12798, 1.05357)
+texture = ExtResource("4_wyr5b")
+
+[node name="pipes" parent="." instance=ExtResource("4_u5jgx")]
+position = Vector2(252, -179)
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+
+[node name="Parallax2D" type="Parallax2D" parent="."]
+scroll_offset = Vector2(-8, 0)
+repeat_size = Vector2(336, 0)
+autoscroll = Vector2(-220, 0)
+follow_viewport = false
+ignore_camera_scroll = true
+script = ExtResource("7_s4r0k")
+
+[node name="Base2" type="Sprite2D" parent="Parallax2D"]
+z_index = 3
+position = Vector2(-1, 217)
+texture = ExtResource("4_wyr5b")
+
+[node name="Background-day" type="Sprite2D" parent="."]
+z_index = -2
+position = Vector2(-16, 0)
+scale = Vector2(1.33, 1.33)
+texture = ExtResource("1_51qp6")
+
+[node name="Area2D" type="Area2D" parent="." groups=["pipe"]]
+disable_mode = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+position = Vector2(8.5, 216)
+shape = SubResource("RectangleShape2D_yijrw")
+
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="Area2D"]
+position = Vector2(3, -252)
+shape = SubResource("RectangleShape2D_yijrw")
+
+[node name="StaticBody2D" type="StaticBody2D" parent="." groups=["pipe"]]
+position = Vector2(-8, -7)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D"]
+position = Vector2(8, 227)
+shape = SubResource("RectangleShape2D_yijrw")
+
+[connection signal="gameover" from="CharacterBody2D" to="." method="_on_character_body_2d_gameover"]
+[connection signal="gameover" from="CharacterBody2D" to="Node2D" method="_on_character_body_2d_gameover"]
+[connection signal="gameover" from="CharacterBody2D" to="Parallax2D" method="_on_character_body_2d_gameover"]
+[connection signal="area_entered" from="CharacterBody2D/Area2D" to="CharacterBody2D" method="_on_area_2d_area_entered"]
+[connection signal="body_entered" from="CharacterBody2D/Area2D" to="CharacterBody2D" method="_on_area_2d_body_entered"]
+[connection signal="timeout" from="Node2D/Timer" to="Node2D" method="_on_timer_timeout"]

@@ -1,13 +1,34 @@
-[gd_scene load_steps=11 format=3 uid="uid://cq5gijvp66d0w"]
+[gd_scene load_steps=13 format=3 uid="uid://cq5gijvp66d0w"]
 
 [ext_resource type="Texture2D" uid="uid://6ewdwmnnv3x2" path="res://flappy-bird-assets/sprites/background-day.png" id="1_51qp6"]
 [ext_resource type="Script" path="res://scripts/flap.gd" id="1_dr45h"]
 [ext_resource type="Script" path="res://main.gd" id="1_xdd85"]
 [ext_resource type="Texture2D" uid="uid://komb04dvbdwm" path="res://flappy-bird-assets/sprites/yellowbird-midflap.png" id="2_l31fc"]
-[ext_resource type="PackedScene" uid="uid://bkkaf4egj8ynv" path="res://nodes/pipes.tscn" id="4_u5jgx"]
+[ext_resource type="Texture2D" uid="uid://db8aqjxmstkvc" path="res://flappy-bird-assets/sprites/yellowbird-downflap.png" id="3_42eay"]
 [ext_resource type="Texture2D" uid="uid://br03uyhpgve54" path="res://flappy-bird-assets/sprites/base.png" id="4_wyr5b"]
 [ext_resource type="Script" path="res://spawn.gd" id="5_dyiee"]
+[ext_resource type="Texture2D" uid="uid://5yvpvb28j0k" path="res://flappy-bird-assets/sprites/yellowbird-upflap.png" id="5_g1p4o"]
 [ext_resource type="Script" path="res://parallax_2d.gd" id="7_s4r0k"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_3bgar"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("3_42eay")
+}, {
+"duration": 1.0,
+"texture": ExtResource("2_l31fc")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5_g1p4o")
+}, {
+"duration": 1.0,
+"texture": ExtResource("2_l31fc")
+}],
+"loop": true,
+"name": &"default",
+"speed": 8.0
+}]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_eh2u7"]
 height = 20.0
@@ -27,24 +48,32 @@ z_index = 3
 position = Vector2(-8, 0)
 script = ExtResource("1_dr45h")
 
+[node name="AnimationPlayer" type="AnimationPlayer" parent="CharacterBody2D"]
+root_node = NodePath("../..")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="CharacterBody2D"]
+sprite_frames = SubResource("SpriteFrames_3bgar")
+frame_progress = 0.812516
+
 [node name="Sprite2D" type="Sprite2D" parent="CharacterBody2D"]
+visible = false
 texture_filter = 1
 texture = ExtResource("2_l31fc")
 
 [node name="Area2D" type="Area2D" parent="CharacterBody2D" groups=["bird"]]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="CharacterBody2D/Area2D"]
-position = Vector2(-1, 0)
+position = Vector2(7, 0)
 shape = SubResource("CapsuleShape2D_eh2u7")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="CharacterBody2D"]
+position = Vector2(8, 0)
 shape = SubResource("CapsuleShape2D_eh2u7")
 
 [node name="Node2D" type="Node2D" parent="."]
 script = ExtResource("5_dyiee")
 
 [node name="Timer" type="Timer" parent="Node2D"]
-autostart = true
 
 [node name="Base" type="Sprite2D" parent="."]
 visible = false
@@ -52,16 +81,10 @@ position = Vector2(-1.5, 330)
 scale = Vector2(1.12798, 1.05357)
 texture = ExtResource("4_wyr5b")
 
-[node name="pipes" parent="." instance=ExtResource("4_u5jgx")]
-position = Vector2(252, -179)
-
-[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
-
 [node name="Parallax2D" type="Parallax2D" parent="."]
-scroll_offset = Vector2(-8, 0)
+scroll_offset = Vector2(-19, -3)
 repeat_size = Vector2(336, 0)
-autoscroll = Vector2(-220, 0)
-follow_viewport = false
+autoscroll = Vector2(-100, 0)
 ignore_camera_scroll = true
 script = ExtResource("7_s4r0k")
 

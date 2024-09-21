@@ -23,6 +23,8 @@ func _physics_process(delta: float) -> void:
 	if(dead == true):
 		rotation = 45;
 		$AnimatedSprite2D.pause(); 
+		if Input.is_action_just_pressed("jump"):
+			get_tree().reload_current_scene();
 
 #checks for death signal
 func _on_area_2d_area_entered(area: Area2D) -> void:

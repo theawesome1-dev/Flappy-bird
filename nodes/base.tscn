@@ -1,0 +1,23 @@
+[gd_scene load_steps=4 format=3 uid="uid://mnmnt44ad5bg"]
+
+[ext_resource type="Script" path="res://scripts/movePipes.gd" id="1_gp0jd"]
+[ext_resource type="Texture2D" uid="uid://br03uyhpgve54" path="res://flappy-bird-assets/sprites/base.png" id="2_goy4l"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_yijrw"]
+size = Vector2(365, 110)
+
+[node name="base" type="Area2D" groups=["pipe"]]
+script = ExtResource("1_gp0jd")
+del = -300
+
+[node name="Base2" type="Sprite2D" parent="."]
+z_index = 2
+position = Vector2(-28, 214)
+texture = ExtResource("2_goy4l")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(-8, 220)
+shape = SubResource("RectangleShape2D_yijrw")
+
+[connection signal="area_entered" from="." to="." method="_on_area_entered"]
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]

@@ -13,16 +13,17 @@ func _process(delta: float) -> void:
 	pass
 
 func _physics_process(delta: float) -> void:
-	$AnimatedSprite2D.play();
+	$animateBird.play();
 	if startGame == true:
 		velocity.y += gravity * delta #sets velocity
 	if Input.is_action_just_pressed("jump") && dead == false:
 		velocity.y = jump; #jump
 		startGame = true; 
+		
 	move_and_slide(); 
 	if(dead == true):
 		rotation = 45;
-		$AnimatedSprite2D.pause(); 
+		$animateBird.pause(); 
 		if Input.is_action_just_pressed("jump"):
 			get_tree().reload_current_scene();
 

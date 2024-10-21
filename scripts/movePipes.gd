@@ -1,22 +1,18 @@
 extends Area2D
 
-var speed;
+@export var speed = -3;
 @export var del: int = -500;
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	pass # Replace with function body.
-
-
+	#gets signal from bird
+	var bird =  get_node("/root/game scene/bird")
+	print(bird);
+	bird.gameover.connect(self._on_character_body_2d_gameover);
+	
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
-	if (get_parent().get_parent() != null):
-		speed = get_parent().get_parent().speed; 
-	else:
-		speed = get_parent().speed;
-	position += Vector2(speed, 0);
+	position.x += speed;
 	if (position.x < del):
 		queue_free(); #deletes pipe after it goes off screen
-	
-
-func _on_area_entered(area: Area2D) -> void:
-	pass  
+func _on_character_body_2d_gameover() -> void:
+	speed = 0;   #speed = zero on death
